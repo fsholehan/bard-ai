@@ -1,22 +1,22 @@
 import express from "express";
 import dotenv from "dotenv";
 import Bard from "bard-ai";
+import cors from "cors"; // Import paket cors
 
-dotenv.config({ path: ".env" }); // Secara default mencari file .env di root direktori
+dotenv.config({ path: ".env" });
 
 const app = express();
 
+// Gunakan cors middleware
+app.use(cors());
+
 app.get("/anime", async (req, res) => {
-  // Dapatkan nilai episodeNumber dari URL
   const info = req.query.info;
 
-  // Buat objek Bard baru
   const myBard = new Bard(process.env.BARD_SESSION_KEY);
 
-  // Minta jawaban dari Bard
   const answer = await myBard.ask(`${info} cerita soal apa?`);
 
-  // Kirim jawaban ke klien
   res.json({ answer });
 });
 
