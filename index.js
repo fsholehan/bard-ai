@@ -15,7 +15,9 @@ app.get("/anime", async (req, res) => {
 
   const myBard = new Bard(process.env.BARD_SESSION_KEY);
 
-  const answer = await myBard.ask(`${info} cerita soal apa?`);
+  const answer = await myBard.ask(
+    `${info} cerita soal apa? pakai bahasa indonesia ya`
+  );
 
   res.json({ answer });
 });
