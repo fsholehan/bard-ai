@@ -22,6 +22,21 @@ app.get("/anime", async (req, res) => {
   res.json({ answer });
 });
 
+app.get("/ask", async (req, res) => {
+  const { question } = req.query;
+  const myBard = new Bard(process.env.BARD_SESSION_KEY);
+  let myChat = myBard.createChat();
+
+  try {
+    const answer = await myChat.ask(question);
+    res.json({ answer });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server berjalan di port 3000");
 });
