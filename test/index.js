@@ -1,9 +1,21 @@
-import Bard from "bard-ai";
+import Groq from "groq-sdk";
 import dotenv from "dotenv";
+
 dotenv.config({ path: ".env" });
 
-let myBard = new Bard(process.env.BARD_SESSION_KEY);
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
-let myChat = myBard.createChat();
-console.log(await myChat.ask("How are you?"));
-console.log(await myChat.ask("What's the last thing I said?"));
+async function main() {
+  const chatCompletion = await groq.chat.completions.create({
+    messages: [
+      { role: "user", content: "buatin kode untuk mengambil array javascript" },
+    ],
+    model: "llama3-70b-8192",
+  });
+
+  console.log(chatCompletion.choices[0].message.content);
+}
+
+main();

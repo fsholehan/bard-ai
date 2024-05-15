@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import Bard from "bard-ai";
-import cors from "cors"; // Import paket cors
+import cors from "cors"; // Import paket corsimp
+import ollama from "ollama";
 
 dotenv.config({ path: ".env" });
 
@@ -11,15 +12,13 @@ const app = express();
 app.use(cors());
 
 app.get("/anime", async (req, res) => {
-  const info = req.query.info;
+  const response = await ollama.chat({
+    model: "llama2",
+    messages: [{ role: "user", content: "Why is the sky blue?" }],
+  });
+  console.log(response.message.content);
 
-  const myBard = new Bard(process.env.BARD_SESSION_KEY);
-
-  const answer = await myBard.ask(
-    `${info} cerita soal apa? pakai bahasa indonesia ya`
-  );
-
-  res.json({ answer });
+  res.json({ answer: response.message.content });
 });
 
 app.get("/ask", async (req, res) => {
@@ -31,9 +30,7 @@ app.get("/ask", async (req, res) => {
     const answer = await myChat.ask(question);
     res.json({ answer });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing the request." });
+    res.status(500).json({ error });
   }
 });
 
