@@ -33,18 +33,39 @@ app.get("/anime", async (req, res) => {
   res.json({ answer: response.choices[0].message.content });
 });
 
+let conversationContext = [];
+
 // Endpoint untuk menerima pesan dan mengirim balasan
 app.post("/chat", async (req, res) => {
   try {
     const { message } = req.body;
+
+    // Tambahkan instruksi sistem untuk fokus pada anime
+    const systemMessage = {
+      role: "system",
+      content:
+        "Nama kamu adalah NakaAI dan kamu hanya menjawab seputar manga dan anime, dan balas hanya pakai bahasa indonesia dan pakai gaya yang tidak formal yang asik gitu.",
+    };
+
+    // Tambahkan pesan pengguna ke konteks percakapan
+    conversationContext.push(systemMessage);
+    conversationContext.push({ role: "user", content: message });
+
     // Kirim pesan ke Groq dan dapatkan balasan
     const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: "user", content: message }],
+      messages: conversationContext,
       model: "llama3-70b-8192", // Ganti dengan model yang Anda inginkan
     });
 
+    // Dapatkan balasan dari AI dan tambahkan ke konteks
+    const aiReply = chatCompletion.choices[0].message.content;
+    conversationContext.push({ role: "system", content: aiReply });
+
     // Kirim balasan ke pengguna
-    res.json({ reply: chatCompletion.choices[0].message.content });
+    res.json({ reply: aiReply });
+
+    // Bersihkan konteks setelah beberapa waktu atau berdasarkan logika tertentu
+    // conversationContext = []; // Uncomment untuk membersihkan konteks
   } catch (error) {
     console.error("Error during chat completion:", error);
     res.status(500).send("Internal Server Error");
