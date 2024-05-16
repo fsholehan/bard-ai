@@ -2,10 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Import paket corsimp
 import Groq from "groq-sdk";
+import bodyParser from "body-parser";
 
 dotenv.config({ path: ".env" });
 
 const app = express();
+app.use(bodyParser.json());
 
 // Gunakan cors middleware
 app.use(cors());
@@ -38,7 +40,7 @@ app.post("/chat", async (req, res) => {
     // Kirim pesan ke Groq dan dapatkan balasan
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: "user", content: message }],
-      model: "mixtral-8x7b-32768", // Ganti dengan model yang Anda inginkan
+      model: "llama3-70b-8192", // Ganti dengan model yang Anda inginkan
     });
 
     // Kirim balasan ke pengguna
