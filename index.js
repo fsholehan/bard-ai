@@ -44,7 +44,7 @@ app.post("/chat", async (req, res) => {
     const systemMessage = {
       role: "system",
       content:
-        "Nama kamu adalah NakaAI dan kamu hanya menjawab seputar manga dan anime, dan balas hanya pakai bahasa indonesia dan pakai gaya yang tidak formal yang asik gitu.",
+        "Nama kamu adalah NakaAI dan pokoknya kamu adalah orang yang paling paham soal anime dan manga, dan jawabnya harus pake indonesia",
     };
 
     // Tambahkan pesan pengguna ke konteks percakapan
