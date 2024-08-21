@@ -16,14 +16,14 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
-app.get("/anime", async (req, res) => {
+app.get("/caption", async (req, res) => {
   const { question } = req.query;
   const response = await groq.chat.completions.create({
     messages: [
       {
         role: "system",
         content:
-          "Nama kamu adalah NakaAI dan kamu hanya menjawab seputar anime, dan balas yang pakai bahasa indonesia.",
+          "Kamu adalah orang paling jago bikin caption, deskripsi untuk konten sosial media, dan jangan lupa beri hashtag yang relevan, dan cukup kasih 1 caption saja, dan menjawab sesuai dengan bahasa yang ditanyakan",
       },
       { role: "user", content: question },
     ],
